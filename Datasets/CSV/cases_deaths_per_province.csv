@@ -1,4 +1,4 @@
-,province,p_codes,region,r_codes,cases,deaths,fatality_rate
+,province,adm2_psgc,region,adm1_psgc,cases,deaths,fatality_rate
 0,Abra,1400100000,CAR,1400000000,56,2,3.57
 1,Agusan del Norte,1600200000,Region XIII,1600000000,934,8,0.86
 2,Agusan del Sur,1600300000,Region XIII,1600000000,781,21,2.69
@@ -85,3 +85,5 @@
 83,Zamboanga Sibugay,908300000,Region IX,900000000,406,6,1.48
 84,Zamboanga del Norte,907200000,Region IX,900000000,1153,3,0.26
 85,Zamboanga del Sur,907300000,Region IX,900000000,960,7,0.73
+86,Maguindanao del Sur,1908800000,BARMM,1900000000,264,7,2.65
+87,Special Geographic Area,1909900000,BARMM,1900000000,1485,88,5.93

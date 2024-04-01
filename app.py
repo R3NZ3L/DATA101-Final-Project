@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import dash_bootstrap_components as dbc
+import mapboxgl
+
+mapboxgl.access_token = 'pk.eyJ1IjoicjNuejNsIiwiYSI6ImNsdTNlZ2w2ODB6MjIyanFodDR6NXl2MnMifQ.kveM31v-0p75V41iiEt3bQ'
 
 external_stylesheets = [dbc.themes.MINTY]
 app = Dash(__name__, external_stylesheets=external_stylesheets)
@@ -34,7 +37,10 @@ app.layout = dbc.Container([
 
     # Visualizations
     dbc.Row([
+        dbc.Col([
 
+        ]),
+        dbc.Col([])
     ])
 
 

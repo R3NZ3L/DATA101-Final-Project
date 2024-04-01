@@ -1,4 +1,4 @@
-,region,r_codes,cases,deaths,fatality_rate
+,region,adm1_psgc,cases,deaths,fatality_rate
 0,BARMM,1900000000,1008,23,2.28
 1,CAR,1400000000,981,73,7.44
 2,MIMAROPA,1700000000,5077,23,0.45
