@@ -18,8 +18,9 @@ main_df = pd.read_csv("datasets/csv/dengue_cleaned.csv")
 cdpp = pd.read_csv("datasets/csv/cases_deaths_per_province.csv")
 cdpr = pd.read_csv("datasets/csv/cases_deaths_per_region.csv")
 regions = gpd.read_file("datasets/json/regions.json")
-# provinces = gpd.read_file("datasets/json/provinces.json")
-regions_gdf = regions[["adm1_psgc", "geometry"]].merge(cdpr, on="adm1_psgc").set_index("adm1_psgc")
+provinces = gpd.read_file("datasets/json/provinces.json")
+regions_gdf = regions[["adm1_psgc", "geometry"]].merge(
+    cdpr, on="adm1_psgc").set_index("adm1_psgc")
 
 # Discrete color scheme for Regional display
 color_dict = {
@@ -126,7 +127,7 @@ app.layout = dbc.Container([
     ],
         style={
             'padding': '50px 150px 50px 150px'
-        }
+    }
     )
 
 
