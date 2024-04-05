@@ -160,13 +160,13 @@ app.layout = dbc.Container([
             children=[
                 html.Div(
                     [
-                        html.H4("Severity of Dengue Across Time", style={
+                        html.H4("Severity of Dengue Across the Philippines", style={
                             'text-align': 'left',
                             "padding-top": '60px',
                             "padding-bottom": '10px',
                             "color": "black"
                         }),
-                        html.P("The interactive line graph below presents the reported severity of Dengue in the Philippines across the months in 2020. Select the depth of the data whether national or regional on the radio buttons. There is also an option on selecting which variables and regions you wish to access. There are options of obtaining dengue cases and deaths by selecting the radio buttons, and the dropdown provides a method of isolating a specific region that you wish to highlight. Additionally, the graph legend on the right is interactive. Clicking on a region allows the attributed line to disappear or reappear. Selecting National as the depth aggregates the reported severity across all regions in the country throughout the year.", style={
+                        html.P("The interactive map on the bottom left presents the severity of dengue in the Philippines. Select the depth of the data whether regional or provincial on the radio buttons. There is also an option on selecting which variable you wish to access. There are options of obtaining dengue cases, deaths, and fatality rates. The bar graph on the bottom right depicts the same data but provides a point of comparison between the areas in the country. Both in the interactive Map and Bar Chart, are levels of dengue severity in terms of the saturation of red. The more severe dengue is in an area, the more saturated the color will be.", style={
                             'text-align': 'justify',
                             "padding-bottom": '15px'
                         })
@@ -373,7 +373,8 @@ def update_bc_bar(map_depth, variable, reg1, reg2, reg3):
 
         if variable == "cases":
             fig = px.bar(
-                cdpp.sort_values(ascending=False, by="cases").loc[eval(condition)],
+                cdpp.sort_values(
+                    ascending=False, by="cases").loc[eval(condition)],
                 x="province",
                 y="cases",
                 color="region",
@@ -387,7 +388,8 @@ def update_bc_bar(map_depth, variable, reg1, reg2, reg3):
             )
         elif variable == "deaths":
             fig = px.bar(
-                cdpp.sort_values(ascending=False, by="deaths").loc[eval(condition)],
+                cdpp.sort_values(
+                    ascending=False, by="deaths").loc[eval(condition)],
                 x="province",
                 y="deaths",
                 color="region",
@@ -401,7 +403,8 @@ def update_bc_bar(map_depth, variable, reg1, reg2, reg3):
             )
         elif variable == "fatality_rate":
             fig = px.bar(
-                cdpp.sort_values(ascending=False, by="fatality_rate").loc[eval(condition)],
+                cdpp.sort_values(
+                    ascending=False, by="fatality_rate").loc[eval(condition)],
                 x="province",
                 y="fatality_rate",
                 color="region",
