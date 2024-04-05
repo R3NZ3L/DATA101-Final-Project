@@ -59,14 +59,20 @@ color_dict = {
 }
 
 app.layout = dbc.Container([
-    # Navigation Bar
-    dbc.NavbarSimple([
-        dbc.NavItem(dbc.NavLink("BACKGROUND", href="#")),
-        dbc.NavItem(dbc.NavLink("VISUALIZATIONS", href="#"))
-    ],
+    dbc.NavbarSimple(
+        [
+            dbc.NavItem(dbc.NavLink("Background", href="#")),
+            dbc.NavItem(dbc.NavLink(
+                "Across The Philippines", href="#across_country")),
+            dbc.NavItem(dbc.NavLink("Across Time", href="#across_time")),
+
+        ],
         brand="GROUP A - Final Project",
         brand_href="#",
-        color="#fffae5"
+        color="#FFF9C4",
+        sticky="top",
+        # Make the navbar stick to the top of the page
+        style={'height': '60px'},
     ),
 
     # Landing Page
@@ -87,10 +93,10 @@ app.layout = dbc.Container([
 
     html.Div([
         html.H4(
-            ["There were ", html.Strong("91,000+"), " confirmed dengue infections and ", html.Strong(
-                "1,100+"), " confirmed deaths from ", html.Strong("Dengue"), " in 2020 "],
+            ["There were ", html.Strong("91,000+", style={'color': '#D32F2F', 'text-shadow': '1px 1px 1px black'}), " confirmed dengue infections and ", html.Strong(
+                "1,100+", style={'color': '#D32F2F', 'text-shadow': '1px 1px 1px black'}), " confirmed deaths from ", html.Strong("Dengue", style={'color': '#D32F2F', 'text-shadow': '1px 1px 1px black'}), " in 2020 "],
             style={
-                'padding': '25px',
+                'padding': '20px',
                 'text-align': 'center'
             }
         ),
@@ -147,22 +153,24 @@ app.layout = dbc.Container([
 
         html.Hr(),
 
-        dbc.Row([
-            html.Div([
-                html.H4("Severity of Dengue Across the Philippines", style={
-                    'text-align': 'left',
-                    "padding-top": '60px',
-                    "padding-bottom": '10px',
-                    "color": "black"
-
-                }),
-                html.P("The interactive map on the bottom left presents the severity of dengue in the Philippines. Select the depth of the data whether regional or provincial on the radio buttons. There is also an option on selecting which variable you wish to access. There are options of obtaining dengue cases, deaths, and fatality rates. The bar graph on the bottom right depicts the same data but provides a point of comparison between the areas in the country. Both in the interactive Map and Bar Chart, are levels of dengue severity in terms of the saturation of red. The more severe dengue is in an area, the more saturated the color will be.", style={
-                    'text-align': 'justify',
-                    "padding-bottom": '15px'
-                })
-            ])
-        ]),
-
+        dbc.Row(
+            id="across_country",  # Assigning the id attribute
+            children=[
+                html.Div(
+                    [
+                        html.H4("Severity of Dengue Across Time", style={
+                            'text-align': 'left',
+                            "padding-top": '60px',
+                            "padding-bottom": '10px',
+                            "color": "black"
+                        }),
+                        html.P("The interactive line graph below presents the reported severity of Dengue in the Philippines across the months in 2020. Select the depth of the data whether national or regional on the radio buttons. There is also an option on selecting which variables and regions you wish to access. There are options of obtaining dengue cases and deaths by selecting the radio buttons, and the dropdown provides a method of isolating a specific region that you wish to highlight. Additionally, the graph legend on the right is interactive. Clicking on a region allows the attributed line to disappear or reappear. Selecting National as the depth aggregates the reported severity across all regions in the country throughout the year.", style={
+                            'text-align': 'justify',
+                            "padding-bottom": '15px'
+                        })
+                    ]
+                )
+            ]),
 
         # Visualizations
         dbc.Row([
@@ -239,21 +247,22 @@ app.layout = dbc.Container([
 
         html.Br(),
         html.Hr(),
-        dbc.Row([
-            html.Div([
-                html.H4("Dengue Severity Across Time", style={
-                    'text-align': 'left',
-                    "padding-top": '60px',
-                    "padding-bottom": '10px',
-                    "color": "black"
-
-                }),
-                html.P("The interactive line graph below presents the reported severity of Dengue in the Philippines across the months in 2020. Select the depth of the data whether national or regional on the radio buttons. There is also an option on selecting which variables and regions you wish to access. There are options of obtaining dengue cases and deaths by selecting the radio buttons, and the dropdown provides a method of isolating a specific region that you wish to highlight. Additionally, the graph legend on the right is interactive. Clicking on a region allows the attributed line to disappear or reappear. Selecting National as the depth aggregates the reported severity across all regions in the country throughout the year.", style={
-                    'text-align': 'justify',
-                    "padding-bottom": '15px'
-                })
-            ])
-        ]),
+        dbc.Row(
+            id="across_time",
+            children=[
+                html.Div([
+                    html.H4("Severity of Dengue Across Time", style={
+                        'text-align': 'left',
+                        "padding-top": '60px',
+                        "padding-bottom": '10px',
+                        "color": "black"
+                    }),
+                    html.P("The interactive line graph below presents the reported severity of Dengue in the Philippines across the months in 2020. Select the depth of the data whether national or regional on the radio buttons. There is also an option on selecting which variables and regions you wish to access. There are options of obtaining dengue cases and deaths by selecting the radio buttons, and the dropdown provides a method of isolating a specific region that you wish to highlight. Additionally, the graph legend on the right is interactive. Clicking on a region allows the attributed line to disappear or reappear. Selecting National as the depth aggregates the reported severity across all regions in the country throughout the year.", style={
+                        'text-align': 'justify',
+                        "padding-bottom": '15px'
+                    })
+                ])
+            ]),
         # Line Chart - Insert words here
         html.Div([
             dcc.Graph(
@@ -309,7 +318,7 @@ app.layout = dbc.Container([
 ], fluid=True)
 
 
-@callback(
+@ callback(
     Output("bc_bar", "figure"),
     Input("map_depth", "value"),
     Input("variable", "value"),
@@ -393,7 +402,7 @@ def update_bc_bar(map_depth, variable, prov1, prov2, prov3):
     return fig.update_layout(margin=dict(t=20, b=50), height=400)
 
 
-@callback(
+@ callback(
     Output("bc_map", "figure"),
     Input("map_depth", "value"),
     Input("variable", "value")
@@ -444,7 +453,7 @@ def update_bc_map(map_depth, variable):
                              margin=dict(t=20, b=50, l=0, r=0), height=550)
 
 
-@callback(
+@ callback(
     Output("bc_line", "figure"),
     [Input("line_depth", "value"),
      Input("line_variable", "value"),
