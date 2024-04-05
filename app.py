@@ -66,16 +66,15 @@ app.layout = dbc.Container([
     # Landing Page
     dbc.Row([
         html.Div(
-            html.H1("Dengue Severity in the Philippines", style={
+            html.H1("Philippine Dengue Severity Dashboard", style={
                 'padding': '125px',
                 'text-align': 'center',
                 'text-shadow': '2px 2px 2px black',
-                'color': 'white',  # Text color
-                # Background image
+                'color': 'white',
                 'background-image': 'url("https://github.com/R3NZ3L/DATA101-Final-Project/blob/main/assets/header.png?raw=true")',
-                'background-size': 'cover',  # Ensure the image covers the entire div
-                'background-position': 'center',  # Center the image
-                'height': '300px',  # Height of the div
+                'background-size': 'cover',
+                'background-position': 'center',
+                'height': '300px',
             })
         )
     ]),
@@ -151,7 +150,7 @@ app.layout = dbc.Container([
                     "color": "black"
 
                 }),
-                html.P("The interactive map on the bottom left presents the severity of dengue in the Philippines. Select the depth of the data whether regional or provincial on the radio buttons. There is also an option on selecting which variable you wish to access. There are options of obtaining dengue cases, deaths, and fatality rates. The bar graph on the bottom right depicts the same data but provides a point of comparison between the areas in the country", style={
+                html.P("The interactive map on the bottom left presents the severity of dengue in the Philippines. Select the depth of the data whether regional or provincial on the radio buttons. There is also an option on selecting which variable you wish to access. There are options of obtaining dengue cases, deaths, and fatality rates. The bar graph on the bottom right depicts the same data but provides a point of comparison between the areas in the country. Both in the interactive Map and Bar Chart, are levels of dengue severity in terms of the saturation of red. The more severe dengue is in an area, the more saturated the color will be.", style={
                     'text-align': 'justify',
                     "padding-bottom": '15px'
                 })
@@ -222,7 +221,7 @@ app.layout = dbc.Container([
                     "color": "black"
 
                 }),
-                html.P("The interactive line graph below presents the reported severity of Dengue in the Philippines across the months in 2020. Select the depth of the data whether national or regional on the radio buttons. There is also an option on selecting which variables and regions you wish to access. There are options of obtaining dengue cases and deaths by selecting the radio buttons, and the dropdown provides a method of isolating a specific region that you wish to highlight. Additionally, the legend of on the right is interactive. Clicking on a region allows the attributed line to disappear or reappear. Selecting National as the depth aggregates the reported severity across all regions in the country throughout the year.", style={
+                html.P("The interactive line graph below presents the reported severity of Dengue in the Philippines across the months in 2020. Select the depth of the data whether national or regional on the radio buttons. There is also an option on selecting which variables and regions you wish to access. There are options of obtaining dengue cases and deaths by selecting the radio buttons, and the dropdown provides a method of isolating a specific region that you wish to highlight. Additionally, the graph legend on the right is interactive. Clicking on a region allows the attributed line to disappear or reappear. Selecting National as the depth aggregates the reported severity across all regions in the country throughout the year.", style={
                     'text-align': 'justify',
                     "padding-bottom": '15px'
                 })
