@@ -328,6 +328,7 @@ def update_bc_line(line_depth, line_variable, region_dropdown):
     if line_depth == "region":
         if region_dropdown == 'all':
             fig = px.line(per_month,
+                          title=f"Dengue {line_variable} Across The Regions Throughout 2020",
                           x="month_name",
                           y=line_variable,
                           color="region",
@@ -341,6 +342,7 @@ def update_bc_line(line_depth, line_variable, region_dropdown):
         else:
             filtered_data = per_month[per_month['region'] == region_dropdown]
             fig = px.line(filtered_data,
+                          title=f"Dengue {line_variable} in {region_dropdown} Throughout 2020",
                           x="month_name",
                           y=line_variable,
                           color="region",
@@ -353,6 +355,7 @@ def update_bc_line(line_depth, line_variable, region_dropdown):
                           )
     elif line_depth == "national":
         fig = px.line(national,
+                      title=f"National Aggregate {line_variable} in the Philippines throughout 2020",
                       x="month_name",
                       y=line_variable,
                       color="Region",
@@ -368,4 +371,4 @@ def update_bc_line(line_depth, line_variable, region_dropdown):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8055)
+    app.run(debug=True)
