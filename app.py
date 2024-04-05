@@ -21,6 +21,8 @@ regions = gpd.read_file("datasets/json/regions.json")
 provinces = gpd.read_file("datasets/json/provinces.json")
 regions_gdf = regions[["adm1_psgc", "geometry"]].merge(
     cdpr, on="adm1_psgc").set_index("adm1_psgc")
+provinces_gdf = provinces[["adm2_psgc", "geometry"]].merge(
+    cdpp, on="adm2_psgc").set_index("adm2_psgc")
 
 per_month = main_df[['region', 'month_num', 'month_name', 'cases', 'deaths']].groupby(
     ['region', 'month_num', 'month_name'])[['cases', 'deaths']].sum().reset_index()
@@ -180,7 +182,7 @@ app.layout = dbc.Container([
                     figure={},
                     id='bc_map'
                 )
-            ], width=4),
+            ], width=5),
 
             # Bar Chart
             dbc.Col([
@@ -242,7 +244,7 @@ app.layout = dbc.Container([
                         ])
                     ], width=6)
                 ])
-            ], width=8)
+            ], width=7)
         ]),
 
         html.Br(),
@@ -326,8 +328,8 @@ app.layout = dbc.Container([
     Input("bc_reg_dropdown_2", "value"),
     Input("bc_reg_dropdown_3", "value")
 )
-def update_bc_bar(map_depth, variable, prov1, prov2, prov3):
-    provs = [prov1, prov2, prov3]
+def update_bc_bar(map_depth, variable, reg1, reg2, reg3):
+    regs = [reg1, reg2, reg3]
 
     if map_depth == "region":
         if variable == "cases":
@@ -365,36 +367,49 @@ def update_bc_bar(map_depth, variable, prov1, prov2, prov3):
             )
 
     elif map_depth == "province":
+        condition = f"(cdpp['region'] == '{regs[0]}')"
+        for region in regs[1:]:
+            condition += f" | (cdpp['region'] == '{region}')"
+
         if variable == "cases":
             fig = px.bar(
-                cdpr.sort_values(ascending=False, by="cases"),
-                x="region", y="cases", color="cases",
-                color_continuous_scale=px.colors.sequential.OrRd,
+                cdpp.sort_values(ascending=False, by="cases").loc[eval(condition)],
+                x="province",
+                y="cases",
+                color="region",
+                color_discrete_map=color_dict,
                 labels={
-                    "region": "Region",
-                    "cases": "Number of Cases"
+                    "province": "Province",
+                    "cases": "Number of Cases",
+                    "region": "Region"
                 },
                 text_auto=True
             )
         elif variable == "deaths":
             fig = px.bar(
-                cdpr.sort_values(ascending=False, by="deaths"),
-                x="region", y="deaths", color="deaths",
-                color_continuous_scale=px.colors.sequential.OrRd,
+                cdpp.sort_values(ascending=False, by="deaths").loc[eval(condition)],
+                x="province",
+                y="deaths",
+                color="region",
+                color_discrete_map=color_dict,
                 labels={
-                    "region": "Region",
-                    "deaths": "Number of Deaths"
+                    "province": "Province",
+                    "deaths": "Number of Deaths",
+                    "region": "Region"
                 },
                 text_auto=True
             )
         elif variable == "fatality_rate":
             fig = px.bar(
-                cdpr.sort_values(ascending=False, by="fatality_rate"),
-                x="region", y="fatality_rate", color="fatality_rate",
-                color_continuous_scale=px.colors.sequential.OrRd,
+                cdpp.sort_values(ascending=False, by="fatality_rate").loc[eval(condition)],
+                x="province",
+                y="fatality_rate",
+                color="region",
+                color_discrete_map=color_dict,
                 labels={
-                    "region": "Region",
-                    "fatality_rate": "Fatality Rate (in %)"
+                    "province": "Province",
+                    "fatality_rate": "Fatality Rate (in %)",
+                    "region": "Region"
                 },
                 text_auto=True
             )
@@ -447,9 +462,41 @@ def update_bc_map(map_depth, variable):
             )
 
     elif map_depth == "province":
-        pass
+        if variable == "cases":
+            fig = px.choropleth_mapbox(
+                provinces_gdf,
+                geojson=provinces_gdf.geometry,
+                locations=provinces_gdf.index,
+                color="cases",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                center={"lat": 12.74, "lon": 120.9803},
+                mapbox_style="open-street-map",
+                zoom=4.335
+            )
+        elif variable == "deaths":
+            fig = px.choropleth_mapbox(
+                provinces_gdf,
+                geojson=provinces_gdf.geometry,
+                locations=provinces_gdf.index,
+                color="deaths",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                center={"lat": 12.74, "lon": 120.9803},
+                mapbox_style="open-street-map",
+                zoom=4.335
+            )
+        elif variable == "fatality_rate":
+            fig = px.choropleth_mapbox(
+                provinces_gdf,
+                geojson=provinces_gdf.geometry,
+                locations=provinces_gdf.index,
+                color="fatality_rate",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                center={"lat": 12.74, "lon": 120.9803},
+                mapbox_style="open-street-map",
+                zoom=4.335
+            )
 
-    return fig.update_layout(coloraxis_showscale=False, mapbox_bounds={"west": 110, "east": 130, "south": 0, "north": 25},
+    return fig.update_layout(mapbox_bounds={"west": 110, "east": 130, "south": 0, "north": 25},
                              margin=dict(t=20, b=50, l=0, r=0), height=550)
 
 
