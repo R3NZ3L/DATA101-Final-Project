@@ -31,6 +31,12 @@ dropdown_options = [{'label': 'All regions', 'value': 'all'}] + \
     [{'label': region, 'value': region}
         for region in per_month['region'].unique()]
 
+bc_region_dropdown_options = [
+    'BARMM', 'CAR', 'MIMAROPA', 'NCR', 'Region I', 'Region II', 'Region III',
+    'Region IV-A', 'Region IX', 'Region V', 'Region VI', 'Region VII', 'Region VIII',
+    'Region X', 'Region XI', 'Region XII', 'Region XIII'
+]
+
 # Discrete color scheme for Regional display
 color_dict = {
     'BARMM': '#5B7FA4',
@@ -166,7 +172,7 @@ app.layout = dbc.Container([
                     figure={},
                     id='bc_map'
                 )
-            ], width=6),
+            ], width=4),
 
             # Bar Chart
             dbc.Col([
@@ -178,7 +184,28 @@ app.layout = dbc.Container([
                 ]),
                 # Controls
                 dbc.Row([
-                    dbc.Col([], width=6),
+                    dbc.Col([], width=3),
+                    dbc.Col([
+                        html.H5("Select Regions:"),
+                        dcc.Dropdown(
+                            id='bc_reg_dropdown_1',
+                            options=bc_region_dropdown_options,
+                            value='BARMM',
+                            clearable=False
+                        ),
+                        dcc.Dropdown(
+                            id='bc_reg_dropdown_2',
+                            options=bc_region_dropdown_options,
+                            value='CAR',
+                            clearable=False
+                        ),
+                        dcc.Dropdown(
+                            id='bc_reg_dropdown_3',
+                            options=bc_region_dropdown_options,
+                            value='MIMAROPA',
+                            clearable=False
+                        )
+                    ], width=3),
                     dbc.Col([
                         dbc.Row([
                             dbc.Col([
@@ -207,7 +234,7 @@ app.layout = dbc.Container([
                         ])
                     ], width=6)
                 ])
-            ], width=6)
+            ], width=8)
         ]),
 
         html.Br(),
@@ -285,9 +312,14 @@ app.layout = dbc.Container([
 @callback(
     Output("bc_bar", "figure"),
     Input("map_depth", "value"),
-    Input("variable", "value")
+    Input("variable", "value"),
+    Input("bc_reg_dropdown_1", "value"),
+    Input("bc_reg_dropdown_2", "value"),
+    Input("bc_reg_dropdown_3", "value")
 )
-def update_bc_bar(map_depth, variable):
+def update_bc_bar(map_depth, variable, prov1, prov2, prov3):
+    provs = [prov1, prov2, prov3]
+
     if map_depth == "region":
         if variable == "cases":
             fig = px.bar(
@@ -324,9 +356,41 @@ def update_bc_bar(map_depth, variable):
             )
 
     elif map_depth == "province":
-        pass
+        if variable == "cases":
+            fig = px.bar(
+                cdpr.sort_values(ascending=False, by="cases"),
+                x="region", y="cases", color="cases",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                labels={
+                    "region": "Region",
+                    "cases": "Number of Cases"
+                },
+                text_auto=True
+            )
+        elif variable == "deaths":
+            fig = px.bar(
+                cdpr.sort_values(ascending=False, by="deaths"),
+                x="region", y="deaths", color="deaths",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                labels={
+                    "region": "Region",
+                    "deaths": "Number of Deaths"
+                },
+                text_auto=True
+            )
+        elif variable == "fatality_rate":
+            fig = px.bar(
+                cdpr.sort_values(ascending=False, by="fatality_rate"),
+                x="region", y="fatality_rate", color="fatality_rate",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                labels={
+                    "region": "Region",
+                    "fatality_rate": "Fatality Rate (in %)"
+                },
+                text_auto=True
+            )
 
-    return fig.update_layout(margin=dict(t=10, b=50), height=400)
+    return fig.update_layout(margin=dict(t=20, b=50), height=400)
 
 
 @callback(
@@ -343,6 +407,31 @@ def update_bc_map(map_depth, variable):
                 locations=regions_gdf.index,
                 color="cases",
                 color_continuous_scale=px.colors.sequential.OrRd,
+                labels={"cases": "Number of Cases"},
+                center={"lat": 12.74, "lon": 120.9803},
+                mapbox_style="open-street-map",
+                zoom=4.335
+            )
+        elif variable == "deaths":
+            fig = px.choropleth_mapbox(
+                regions_gdf,
+                geojson=regions_gdf.geometry,
+                locations=regions_gdf.index,
+                color="deaths",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                labels={"cases": "Number of Deaths"},
+                center={"lat": 12.74, "lon": 120.9803},
+                mapbox_style="open-street-map",
+                zoom=4.335
+            )
+        elif variable == "fatality_rate":
+            fig = px.choropleth_mapbox(
+                regions_gdf,
+                geojson=regions_gdf.geometry,
+                locations=regions_gdf.index,
+                color="fatality_rate",
+                color_continuous_scale=px.colors.sequential.OrRd,
+                labels={"cases": "Fatality Rate (in %)"},
                 center={"lat": 12.74, "lon": 120.9803},
                 mapbox_style="open-street-map",
                 zoom=4.335
@@ -351,7 +440,8 @@ def update_bc_map(map_depth, variable):
     elif map_depth == "province":
         pass
 
-    return fig.update_layout(margin=dict(t=10, b=50), height=550)
+    return fig.update_layout(coloraxis_showscale=False, mapbox_bounds={"west": 110, "east": 130, "south": 0, "north": 25},
+                             margin=dict(t=20, b=50, l=0, r=0), height=550)
 
 
 @callback(
