@@ -58,7 +58,7 @@ app.layout = dbc.Container([
                     html.Img(
                         src="https://github.com/R3NZ3L/DATA101-Final-Project/blob/main/assets/hospital_picture1.jpg?raw=true", style={'width': '100%'}),
                 ], width=4),
-                ]),
+        ]),
 
         html.Br(),
         html.Br(),

@@ -67,8 +67,8 @@ regions_gdf = regions[["adm1_psgc", "geometry"]].merge(
     cdpr, on="adm1_psgc").set_index("adm1_psgc")
 provinces_gdf = provinces[["adm2_psgc", "geometry"]].merge(
     cdpp, on="adm2_psgc").set_index("adm2_psgc")
-hospitals_gdf = hospitals[["adm1_psgc", "geometry"]].merge(
-    cdpr, on="adm1_psgc").set_index("adm1_psgc")
+hospitals_gdf = hospitals[["healthfaci", "adm1_psgc", "geometry"]].merge(
+    cdpp, on="adm1_psgc").set_index("adm1_psgc")
 
 per_month = main_df[['region', 'month_num', 'month_name', 'cases', 'deaths']].groupby(
     ['region', 'month_num', 'month_name'])[['cases', 'deaths']].sum().reset_index()
@@ -113,7 +113,7 @@ app.layout = dbc.Container([
             dbc.NavItem(dbc.NavLink(
                 "Across The Philippines", href="#across_country")),
             dbc.NavItem(dbc.NavLink("Across Time", href="#across_time")),
-
+            dbc.NavItem(dbc.NavLink("Hospitals in the Philippines", href="#hospitals"))
         ],
         brand="GROUP A - Final Project",
         brand_href="#",
@@ -225,7 +225,7 @@ app.layout = dbc.Container([
                             "color": "black"
                         }),
                         html.P(
-                            "The interactive map on the bottom left presents the severity of dengue in the Philippines. Select the depth of the data whether regional or provincial on the radio buttons. There is also an option on selecting which variable you wish to access. There are options of obtaining dengue cases, deaths, and fatality rates. The bar graph on the bottom right depicts the same data but provides a point of comparison between the areas in the country. Both in the interactive Map and Bar Chart, are levels of dengue severity in terms of the saturation of red. The more severe dengue is in an area, the more saturated the color will be.",
+                            "The interactive map on the bottom left presents the severity of dengue in the Philippines. Select the depth of the data whether regional or provincial on the radio buttons. There is also an option on selecting which variable you wish to access. There are options of obtaining dengue cases, deaths, and fatality rates. The bar graph on the bottom right depicts the same data but provides a point of comparison between the areas in the country. Both in the interactive Map and Bar Chart, are levels of dengue severity in terms of the saturation of red. The more severe dengue is in an area, the more saturated the color will be. Additionally with the option to select 3 regions on the dropdown, the map will update to show provincial boundaries and a choropleth depending on the selected variable, this too reflects on the bar graph wherein the severity of dengue is presented in order of severity and grouped by regions.",
                             style={
                                 'text-align': 'justify',
                                 "padding-bottom": '15px'
@@ -375,11 +375,40 @@ app.layout = dbc.Container([
 
         html.Hr(),
 
+        dbc.Row(
+            id="hospitals",  # Assigning the id attribute
+            children=[
+                html.Div(
+                    [
+                        html.H4("Location of Hospitals in the Philippines", style={
+                            'text-align': 'left',
+                            "padding-top": '60px',
+                            "padding-bottom": '10px',
+                            "color": "black"
+                        }),
+                        html.P(
+                            "The visualization below presents the number and locations of hospitals across the Philippines as of 2020 through points on the map. The graph provides a bird's eye view on the hospitals in the country where each point represents a hospital located in the area. There are options of zooming in and out of specific areas, and panning around the map of the Philippines. When a point in the map is hovered it provides a number of information. This includes the name of the hospital, the hospital's region, and province, as well as the number of cases, deaths, and fatality rates reported in the area.",
+                            style={
+                                'text-align': 'justify',
+                                "padding-bottom": '15px'
+                            })
+                    ]
+                )
+            ]),
+
         dbc.Row([
             dcc.Graph(
                 figure=px.scatter_mapbox(
                     hospitals_gdf, lat=hospitals_gdf.geometry.y, lon=hospitals_gdf.geometry.x,
-                    center={"lat": 12.74, "lon": 120.9803}, mapbox_style="open-street-map", zoom=4.335,
+                    center={"lat": 12.74, "lon": 120.9803}, mapbox_style="open-street-map", zoom=3.0,
+                    hover_name="healthfaci", hover_data=["region", "province", "cases", "deaths", "fatality_rate"],
+                    labels={
+                        "region": "Region",
+                        "province": "Province",
+                        "cases": "Number of Cases",
+                        "deaths": "Number of Deaths",
+                        "fatality_rate": "Fatality_rate (in %)"
+                    }
                 ).update_layout(
                     mapbox_bounds={"west": 110, "east": 130, "south": 0, "north": 25},
                     margin=dict(t=20, b=50, l=0, r=0), height=550
@@ -641,7 +670,7 @@ def update_bc_line(line_depth, line_variable, region_dropdown):
                       }
                       )
 
-    return fig
+    return fig.update_layout(margin=dict(b=50), height=550)
 
 
 if __name__ == "__main__":
