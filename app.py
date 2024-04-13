@@ -400,18 +400,20 @@ app.layout = dbc.Container([
             dcc.Graph(
                 figure=px.scatter_mapbox(
                     hospitals_gdf, lat=hospitals_gdf.geometry.y, lon=hospitals_gdf.geometry.x,
-                    center={"lat": 12.74, "lon": 120.9803}, mapbox_style="open-street-map", zoom=3.0,
+                    center={"lat": 12.74, "lon": 120.9803}, mapbox_style="carto-positron", zoom=3.0,
                     hover_name="healthfaci", hover_data=["region", "province", "cases", "deaths", "fatality_rate"],
                     labels={
                         "region": "Region",
                         "province": "Province",
                         "cases": "Number of Cases",
                         "deaths": "Number of Deaths",
-                        "fatality_rate": "Fatality_rate (in %)"
+                        "fatality_rate": "Fatality rate (in %)"
                     }
                 ).update_layout(
                     mapbox_bounds={"west": 110, "east": 130, "south": 0, "north": 25},
                     margin=dict(t=20, b=50, l=0, r=0), height=550
+                ).update_traces(
+                    marker_color="#FF0A00"
                 )
             )
         ])
@@ -542,7 +544,7 @@ def update_bc_map(map_depth, variable):
                 color_continuous_scale=px.colors.sequential.OrRd,
                 labels={"cases": "Number of Cases"},
                 center={"lat": 12.74, "lon": 120.9803},
-                mapbox_style="open-street-map",
+                mapbox_style="carto-positron",
                 zoom=4.335
             )
         elif variable == "deaths":
@@ -556,7 +558,7 @@ def update_bc_map(map_depth, variable):
                 color_continuous_scale=px.colors.sequential.OrRd,
                 labels={"deaths": "Number of Deaths"},
                 center={"lat": 12.74, "lon": 120.9803},
-                mapbox_style="open-street-map",
+                mapbox_style="carto-positron",
                 zoom=4.335
             )
         elif variable == "fatality_rate":
@@ -570,7 +572,7 @@ def update_bc_map(map_depth, variable):
                 color_continuous_scale=px.colors.sequential.OrRd,
                 labels={"fatality_rate": "Fatality Rate (in %)"},
                 center={"lat": 12.74, "lon": 120.9803},
-                mapbox_style="open-street-map",
+                mapbox_style="carto-positron",
                 zoom=4.335
             )
 
@@ -586,7 +588,7 @@ def update_bc_map(map_depth, variable):
                 color_continuous_scale=px.colors.sequential.OrRd,
                 labels={"province": "Province", "region": "Region", "cases": "Number of Cases"},
                 center={"lat": 12.74, "lon": 120.9803},
-                mapbox_style="open-street-map",
+                mapbox_style="carto-positron",
                 zoom=4.335
             )
         elif variable == "deaths":
@@ -600,7 +602,7 @@ def update_bc_map(map_depth, variable):
                 color_continuous_scale=px.colors.sequential.OrRd,
                 labels={"province": "Province", "region": "Region", "deaths": "Number of Deaths"},
                 center={"lat": 12.74, "lon": 120.9803},
-                mapbox_style="open-street-map",
+                mapbox_style="carto-positron",
                 zoom=4.335
             )
         elif variable == "fatality_rate":
@@ -613,7 +615,7 @@ def update_bc_map(map_depth, variable):
                 color="fatality_rate",
                 color_continuous_scale=px.colors.sequential.OrRd,
                 center={"lat": 12.74, "lon": 120.9803},
-                mapbox_style="open-street-map",
+                mapbox_style="carto-positron",
                 zoom=4.335
             )
 
