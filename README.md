@@ -10,6 +10,8 @@ This repository contains our final project for DATA101.
 
 Our project aims to shed light on the severity of Dengue in the regions and cities of the Philippines. Through visualizations - the use of graphs, charts, and maps, we will illustrate the incidence of dengue cases, deaths, and fatality rates across different cities, allowing for comparisons to identify the most and least affected areas. We visualized the severity of Dengue across provinces and regions, as well as over time (in the year 2020).
 
+<hr>
+
 ### Setup Instructions
 Our dashboard uses the following libraries: <br>
 - dash
