@@ -21,8 +21,14 @@ Our dashboard uses the following libraries: <br>
 <br>
 
 To install these libraries, you can use the command below in your terminal (preferably in a virtual environment): <br>
-```pip install dash pandas plotly dash_bootstrap_components geopandas mapboxgl``` <br> <br>
+
+```Python
+pip install dash pandas plotly dash_bootstrap_components geopandas mapboxgl
+```
+<br>
 
 The file `app.py` contains the Dash application. To view our dashboard, simply run this file, starting the Flask server via Dash's libraries. <br> <br>
+
 Once the server is up and running, the dashboard is accessible on port `8050`, the default for Dash applications <br> (NOTE: please vacate this port before running or specify a port number in the source code). <br> <br>
+
 Once accessible, you will arrive at our landing page. From there, our visualizations are accessible by scrolling down.
