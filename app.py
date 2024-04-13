@@ -1,7 +1,6 @@
 # Import packages
-from dash import Dash, html, dash_table, dcc, callback, Output, Input
+from dash import Dash, html, dcc, callback, Output, Input
 import pandas as pd
-import numpy as np
 import plotly.express as px
 import dash_bootstrap_components as dbc
 import geopandas as gpd
