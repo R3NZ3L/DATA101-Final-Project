@@ -110,9 +110,9 @@ app.layout = dbc.Container([
         [
             dbc.NavItem(dbc.NavLink("Background", href="#")),
             dbc.NavItem(dbc.NavLink(
-                "Across The Philippines", href="#across_country")),
-            dbc.NavItem(dbc.NavLink("Across Time", href="#across_time")),
-            dbc.NavItem(dbc.NavLink("Hospitals in the Philippines", href="#hospitals"))
+                "Across The Philippines", href="#across_country", external_link=True)),
+            dbc.NavItem(dbc.NavLink("Across Time", href="#across_time", external_link=True)),
+            dbc.NavItem(dbc.NavLink("Hospitals in the Philippines", href="#hospitals", external_link=True))
         ],
         brand="GROUP A - Final Project",
         brand_href="#",
